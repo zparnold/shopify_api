@@ -1,3 +1,7 @@
+---
+layout: index
+---
+
 {<img src="https://travis-ci.org/Shopify/shopify_api.png?branch=master" alt="Build Status" />}[https://travis-ci.org/Shopify/shopify_api]
 = Shopify API
 
