@@ -69,51 +69,51 @@ ShopifyAPI uses ActiveResource to communicate with the REST web service. ActiveR
 
     POST https://SHOP_NAME.myshopify.com/admin/oauth/access_token
 
-with the following parameters:
+    with the following parameters:
 
-* `client_id` – Required – The API key for your app
-* `client_secret` – Required – The shared secret for your app
-* `code` – Required – The token you received in step 3
+    * `client_id` – Required – The API key for your app
+    * `client_secret` – Required – The shared secret for your app
+    * `code` – Required – The token you received in step 3
 
-and you'll get your permanent access token back in the response.
+    and you'll get your permanent access token back in the response.
 
-There is a method to make the request and get the token for you. Pass all the params received from the previous call and the method will verify the params, extract the temp code and then request your token:
+    There is a method to make the request and get the token for you. Pass all the params received from the previous call and the method will verify the params, extract the temp code and then request your token:
 
-    token = session.request_token(params)
+    `token = session.request_token(params)`
 
-This method will save the token to the session object and return it. For future sessions simply pass the token in when creating the session object:
+    This method will save the token to the session object and return it. For future sessions simply pass the token in when creating the session object:
 
-    session = ShopifyAPI::Session.new("SHOP_NAME.myshopify.com", token)
+    `session = ShopifyAPI::Session.new("SHOP_NAME.myshopify.com", token)`
 
 5. The session must be activated before use:
 
-    ShopifyAPI::Base.activate_session(session)
+    `ShopifyAPI::Base.activate_session(session)`
 
 6. Now you're ready to make authorized API requests to your shop! Data is returned as ActiveResource instances:
 
-    shop = ShopifyAPI::Shop.current
+		shop = ShopifyAPI::Shop.current
 
-    # Get a specific product
-    product = ShopifyAPI::Product.find(179761209)
+		# Get a specific product
+		product = ShopifyAPI::Product.find(179761209)
 
-    # Create a new product
-    new_product = ShopifyAPI::Product.new
-    new_product.title = "Burton Custom Freestlye 151"
-    new_product.product_type = "Snowboard"
-    new_product.vendor = "Burton"
-    new_product.save
+		# Create a new product
+		new_product = ShopifyAPI::Product.new
+		new_product.title = "Burton Custom Freestlye 151"
+		new_product.product_type = "Snowboard"
+		new_product.vendor = "Burton"
+		new_product.save
 
-    # Update a product
-    product.handle = "burton-snowboard"
-    product.save
+		# Update a product
+		product.handle = "burton-snowboard"
+		product.save
 
-Alternatively, you can use #temp to initialize a Session and execute a command which also handles temporarily setting ActiveResource::Base.site:
+    Alternatively, you can use #temp to initialize a Session and execute a command which also handles temporarily setting ActiveResource::Base.site:
 
-    products = ShopifyAPI::Session.temp("SHOP_NAME.myshopify.com", token) { ShopifyAPI::Product.find(:all) }
+    `products = ShopifyAPI::Session.temp("SHOP_NAME.myshopify.com", token) { ShopifyAPI::Product.find(:all) }`
 
 8. If you want to work with another shop, you'll first need to clear the session:
 
-    ShopifyAPI::Base.clear_session
+    `ShopifyAPI::Base.clear_session`
 
 ## Console
 
@@ -123,17 +123,17 @@ This package also includes the +shopify+ executable to make it easy to open up a
 
 2. Use the +shopify+ script to save the credentials for the shop to quickly log in.
 
-    shopify add yourshopname
+    `shopify add yourshopname`
 
-Follow the prompts for the shop domain, API key and password.
+    Follow the prompts for the shop domain, API key and password.
 
 3. Start the console for the connection.
 
-    shopify console
+    `shopify console`
 
 4. To see the full list of commands, type:
 
-    shopify help
+    `shopify help`
 
 ## Threadsafety
 
@@ -143,8 +143,8 @@ We have a forked version of ActiveResource that stores these class variables in 
 
 To enable threadsafety with ShopifyAPI, add the following to your Gemfile:
 
-    gem 'activeresource', git: 'git://github.com/Shopify/activeresource', branch: 'threadsafe'
-    gem 'shopify_api', '>= 3.2.1'
+	gem 'activeresource', git: 'git://github.com/Shopify/activeresource', branch: 'threadsafe'
+	gem 'shopify_api', '>= 3.2.1'
 
 ## Using Development Version
 
