@@ -36,34 +36,34 @@ ShopifyAPI uses ActiveResource to communicate with the REST web service. ActiveR
 		shop_url = "https://#{API_KEY}:#{PASSWORD}@SHOP_NAME.myshopify.com/admin"
 		ShopifyAPI::Base.site = shop_url
 
-	That's it, you're done, skip to step 7 and start using the API!
+    That's it, you're done, skip to step 7 and start using the API!
 
-	For a partner app you will need to supply two parameters to the Session class before you instantiate it:
+    For a partner app you will need to supply two parameters to the Session class before you instantiate it:
 
-	ShopifyAPI::Session.setup({:api_key => API_KEY, :secret => SHARED_SECRET})
+    `ShopifyAPI::Session.setup({:api_key => API_KEY, :secret => SHARED_SECRET})`
 
 3. In order to access a shop's data, apps need an access token from that specific shop. This is a two-stage process. Before interacting with a shop for the first time an app should redirect the user to the following URL:
 
-    GET https://SHOP_NAME.myshopify.com/admin/oauth/authorize
+    `GET https://SHOP_NAME.myshopify.com/admin/oauth/authorize`
 
-with the following parameters:
+    with the following parameters:
 
-* `client_id` – Required – The API key for your app
-* `scope` – Required – The list of required scopes (explained here: http://docs.shopify.com/api/tutorials/oauth)
-* `redirect_uri` – Optional – The URL that the merchant will be sent to once authentication is complete. Defaults to the URL specified in the application settings and must be the same host as that URL.
+    * `client_id` – Required – The API key for your app
+    * `scope` – Required – The list of required scopes (explained here: http://docs.shopify.com/api/tutorials/oauth)
+    * `redirect_uri` – Optional – The URL that the merchant will be sent to once authentication is complete. Defaults to the URL specified in the application settings and must be the same host as that URL.
 
-We've added the create_permision_url method to make this easier, first instantiate your session object:
+    We've added the create_permision_url method to make this easier, first instantiate your session object:
 
-    session = ShopifyAPI::Session.new("SHOP_NAME.myshopify.com")
+    `session = ShopifyAPI::Session.new("SHOP_NAME.myshopify.com")`
 
-Then call:
+    Then call:
 
-    scope = ["write_products"]
-    permission_url = session.create_permission_url(scope)
+		scope = ["write_products"]
+		permission_url = session.create_permission_url(scope)
 
-or if you want a custom redirect_uri:
+    or if you want a custom redirect_uri:
 
-    permission_url = session.create_permission_url(scope, "https://my_redirect_uri.com")
+    `permission_url = session.create_permission_url(scope, "https://my_redirect_uri.com")`
 
 4. Once authorized, the shop redirects the owner to the return URL of your application with a parameter named 'code'. This is a temporary token that the app can exchange for a permanent access token. Make the following call:
 
