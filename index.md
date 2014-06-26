@@ -67,7 +67,7 @@ ShopifyAPI uses ActiveResource to communicate with the REST web service. ActiveR
 
 4. Once authorized, the shop redirects the owner to the return URL of your application with a parameter named 'code'. This is a temporary token that the app can exchange for a permanent access token. Make the following call:
 
-    POST https://SHOP_NAME.myshopify.com/admin/oauth/access_token
+    `POST https://SHOP_NAME.myshopify.com/admin/oauth/access_token`
 
     with the following parameters:
 
@@ -111,7 +111,7 @@ ShopifyAPI uses ActiveResource to communicate with the REST web service. ActiveR
 
     `products = ShopifyAPI::Session.temp("SHOP_NAME.myshopify.com", token) { ShopifyAPI::Product.find(:all) }`
 
-8. If you want to work with another shop, you'll first need to clear the session:
+7. If you want to work with another shop, you'll first need to clear the session:
 
     `ShopifyAPI::Base.clear_session`
 
