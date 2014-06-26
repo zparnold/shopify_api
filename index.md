@@ -40,11 +40,11 @@ ShopifyAPI uses ActiveResource to communicate with the REST web service. ActiveR
 
     For a partner app you will need to supply two parameters to the Session class before you instantiate it:
 
-    `ShopifyAPI::Session.setup({:api_key => API_KEY, :secret => SHARED_SECRET})`
+    	ShopifyAPI::Session.setup({:api_key => API_KEY, :secret => SHARED_SECRET})
 
 3. In order to access a shop's data, apps need an access token from that specific shop. This is a two-stage process. Before interacting with a shop for the first time an app should redirect the user to the following URL:
 
-    `GET https://SHOP_NAME.myshopify.com/admin/oauth/authorize`
+    	GET https://SHOP_NAME.myshopify.com/admin/oauth/authorize
 
     with the following parameters:
 
@@ -54,7 +54,7 @@ ShopifyAPI uses ActiveResource to communicate with the REST web service. ActiveR
 
     We've added the create_permision_url method to make this easier, first instantiate your session object:
 
-    `session = ShopifyAPI::Session.new("SHOP_NAME.myshopify.com")`
+    	session = ShopifyAPI::Session.new("SHOP_NAME.myshopify.com")
 
     Then call:
 
@@ -63,11 +63,11 @@ ShopifyAPI uses ActiveResource to communicate with the REST web service. ActiveR
 
     or if you want a custom redirect_uri:
 
-    `permission_url = session.create_permission_url(scope, "https://my_redirect_uri.com")`
+    	permission_url = session.create_permission_url(scope, "https://my_redirect_uri.com")
 
 4. Once authorized, the shop redirects the owner to the return URL of your application with a parameter named 'code'. This is a temporary token that the app can exchange for a permanent access token. Make the following call:
 
-    `POST https://SHOP_NAME.myshopify.com/admin/oauth/access_token`
+    	POST https://SHOP_NAME.myshopify.com/admin/oauth/access_token
 
     with the following parameters:
 
@@ -79,15 +79,15 @@ ShopifyAPI uses ActiveResource to communicate with the REST web service. ActiveR
 
     There is a method to make the request and get the token for you. Pass all the params received from the previous call and the method will verify the params, extract the temp code and then request your token:
 
-    `token = session.request_token(params)`
+    	token = session.request_token(params)
 
     This method will save the token to the session object and return it. For future sessions simply pass the token in when creating the session object:
 
-    `session = ShopifyAPI::Session.new("SHOP_NAME.myshopify.com", token)`
+    	session = ShopifyAPI::Session.new("SHOP_NAME.myshopify.com", token)
 
 5. The session must be activated before use:
 
-    `ShopifyAPI::Base.activate_session(session)`
+    	ShopifyAPI::Base.activate_session(session)
 
 6. Now you're ready to make authorized API requests to your shop! Data is returned as ActiveResource instances:
 
@@ -109,11 +109,11 @@ ShopifyAPI uses ActiveResource to communicate with the REST web service. ActiveR
 
     Alternatively, you can use #temp to initialize a Session and execute a command which also handles temporarily setting ActiveResource::Base.site:
 
-    `products = ShopifyAPI::Session.temp("SHOP_NAME.myshopify.com", token) { ShopifyAPI::Product.find(:all) }`
+    	products = ShopifyAPI::Session.temp("SHOP_NAME.myshopify.com", token) { ShopifyAPI::Product.find(:all) }
 
 7. If you want to work with another shop, you'll first need to clear the session:
 
-    `ShopifyAPI::Base.clear_session`
+		ShopifyAPI::Base.clear_session
 
 ## Console
 
@@ -123,17 +123,17 @@ This package also includes the +shopify+ executable to make it easy to open up a
 
 2. Use the +shopify+ script to save the credentials for the shop to quickly log in.
 
-    `shopify add yourshopname`
+		shopify add yourshopname
 
     Follow the prompts for the shop domain, API key and password.
 
 3. Start the console for the connection.
 
-    `shopify console`
+		shopify console
 
 4. To see the full list of commands, type:
 
-    `shopify help`
+		shopify help
 
 ## Threadsafety
 
