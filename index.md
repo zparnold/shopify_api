@@ -2,17 +2,21 @@
 layout: index
 ---
 
-{<img src="https://travis-ci.org/Shopify/shopify_api.png?branch=master" alt="Build Status" />}[https://travis-ci.org/Shopify/shopify_api]
-= Shopify API
+[![Build Status](https://travis-ci.org/Shopify/shopify_api.png?branch=master)](https://travis-ci.org/Shopify/shopify_api)
 
 The Shopify API gem allows Ruby developers to programmatically access the admin section of Shopify stores.
 
 The API is implemented as JSON over HTTP using all four verbs (GET/POST/PUT/DELETE). Each resource, like Order, Product, or Collection, has its own URL and is manipulated in isolation. In other words, we’ve tried to make the API follow the REST principles as much as possible.
 
+## Installation
 
-== Usage
+To easily install or upgrade to the latest release, use {gem}[http://rubygems.org/]
 
-=== Requirements
+    gem install shopify_api
+
+## Usage
+
+### Requirements
 
 All API usage happens through Shopify applications, created by either shop owners for their own shops, or by Shopify Partners for use by other shop owners:
 
@@ -21,15 +25,7 @@ All API usage happens through Shopify applications, created by either shop owner
 
 For more information and detailed documentation about the API visit http://api.shopify.com
 
-
-=== Installation
-
-To easily install or upgrade to the latest release, use {gem}[http://rubygems.org/]
-
-    gem install shopify_api
-
-
-=== Getting Started
+## Getting Started
 
 ShopifyAPI uses ActiveResource to communicate with the REST web service. ActiveResource has to be configured with a fully authorized URL of a particular store first. To obtain that URL you can follow these steps:
 
@@ -40,9 +36,9 @@ ShopifyAPI uses ActiveResource to communicate with the REST web service. ActiveR
     shop_url = "https://#{API_KEY}:#{PASSWORD}@SHOP_NAME.myshopify.com/admin"
     ShopifyAPI::Base.site = shop_url
 
-   That's it, you're done, skip to step 7 and start using the API!
+That's it, you're done, skip to step 7 and start using the API!
 
-   For a partner app you will need to supply two parameters to the Session class before you instantiate it:
+For a partner app you will need to supply two parameters to the Session class before you instantiate it:
 
     ShopifyAPI::Session.setup({:api_key => API_KEY, :secret => SHARED_SECRET})
 
@@ -50,22 +46,22 @@ ShopifyAPI uses ActiveResource to communicate with the REST web service. ActiveR
 
     GET https://SHOP_NAME.myshopify.com/admin/oauth/authorize
 
-   with the following parameters:
+with the following parameters:
 
-   * client_id – Required – The API key for your app
-   * scope – Required – The list of required scopes (explained here: http://docs.shopify.com/api/tutorials/oauth)
-   * redirect_uri – Optional – The URL that the merchant will be sent to once authentication is complete. Defaults to the URL specified in the application settings and must be the same host as that URL.
+* `client_id` – Required – The API key for your app
+* `scope` – Required – The list of required scopes (explained here: http://docs.shopify.com/api/tutorials/oauth)
+* `redirect_uri` – Optional – The URL that the merchant will be sent to once authentication is complete. Defaults to the URL specified in the application settings and must be the same host as that URL.
 
-   We've added the create_permision_url method to make this easier, first instantiate your session object:
+We've added the create_permision_url method to make this easier, first instantiate your session object:
 
     session = ShopifyAPI::Session.new("SHOP_NAME.myshopify.com")
 
-   Then call:
+Then call:
 
     scope = ["write_products"]
     permission_url = session.create_permission_url(scope)
 
-   or if you want a custom redirect_uri:
+or if you want a custom redirect_uri:
 
     permission_url = session.create_permission_url(scope, "https://my_redirect_uri.com")
 
@@ -73,21 +69,19 @@ ShopifyAPI uses ActiveResource to communicate with the REST web service. ActiveR
 
     POST https://SHOP_NAME.myshopify.com/admin/oauth/access_token
 
-   with the following parameters:
+with the following parameters:
 
-   * client_id – Required – The API key for your app
-   * client_secret – Required – The shared secret for your app
-   * code – Required – The token you received in step 3
+* `client_id` – Required – The API key for your app
+* `client_secret` – Required – The shared secret for your app
+* `code` – Required – The token you received in step 3
 
-   and you'll get your permanent access token back in the response.
+and you'll get your permanent access token back in the response.
 
-   There is a method to make the request and get the token for you. Pass
-   all the params received from the previous call and the method will verify
-   the params, extract the temp code and then request your token:
+There is a method to make the request and get the token for you. Pass all the params received from the previous call and the method will verify the params, extract the temp code and then request your token:
 
     token = session.request_token(params)
 
-   This method will save the token to the session object and return it. For future sessions simply pass the token in when creating the session object:
+This method will save the token to the session object and return it. For future sessions simply pass the token in when creating the session object:
 
     session = ShopifyAPI::Session.new("SHOP_NAME.myshopify.com", token)
 
@@ -113,7 +107,7 @@ ShopifyAPI uses ActiveResource to communicate with the REST web service. ActiveR
     product.handle = "burton-snowboard"
     product.save
 
-   Alternatively, you can use #temp to initialize a Session and execute a command which also handles temporarily setting ActiveResource::Base.site:
+Alternatively, you can use #temp to initialize a Session and execute a command which also handles temporarily setting ActiveResource::Base.site:
 
     products = ShopifyAPI::Session.temp("SHOP_NAME.myshopify.com", token) { ShopifyAPI::Product.find(:all) }
 
@@ -121,8 +115,7 @@ ShopifyAPI uses ActiveResource to communicate with the REST web service. ActiveR
 
     ShopifyAPI::Base.clear_session
 
-
-=== Console
+## Console
 
 This package also includes the +shopify+ executable to make it easy to open up an interactive console to use the API with a shop.
 
@@ -132,7 +125,7 @@ This package also includes the +shopify+ executable to make it easy to open up a
 
     shopify add yourshopname
 
-   Follow the prompts for the shop domain, API key and password.
+Follow the prompts for the shop domain, API key and password.
 
 3. Start the console for the connection.
 
@@ -142,33 +135,28 @@ This package also includes the +shopify+ executable to make it easy to open up a
 
     shopify help
 
+## Threadsafety
 
-== Threadsafety
+ActiveResource is inherently non-threadsafe, because class variables like ActiveResource::Base.site and ActiveResource::Base.headers are shared between threads. This can cause conflicts when using threaded libraries, like Sidekiq.
 
-ActiveResource is inherently non-threadsafe, because class variables like ActiveResource::Base.site
-and ActiveResource::Base.headers are shared between threads. This can cause conflicts when using
-threaded libraries, like Sidekiq.
-
-We have a forked version of ActiveResource that stores these class variables in threadlocal
-variables. Using this forked version will allow ShopifyAPI to be used in a threaded environment.
+We have a forked version of ActiveResource that stores these class variables in threadlocal variables. Using this forked version will allow ShopifyAPI to be used in a threaded environment.
 
 To enable threadsafety with ShopifyAPI, add the following to your Gemfile:
 
     gem 'activeresource', git: 'git://github.com/Shopify/activeresource', branch: 'threadsafe'
     gem 'shopify_api', '>= 3.2.1'
 
-== Using Development Version
+## Using Development Version
 
 Download the source code and run:
 
     rake install
 
-== Additional Resources
+## Additional Resources
 
-http://docs.shopify.com/api <= Read the tech docs!
+* [Tech documentation](http://docs.shopify.com/api)
+* [Forums](http://ecommerce.shopify.com/c/shopify-apis-and-technology)
 
-http://ecommerce.shopify.com/c/shopify-apis-and-technology <= Ask questions on the forums!
+## License
 
-== Copyright
-
-Copyright (c) 2012 "Shopify inc.". See LICENSE for details.
+Copyright (c) 2012 Shopify. Released under the [MIT-LICENSE](http://opensource.org/licenses/MIT).
