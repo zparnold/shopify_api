@@ -33,14 +33,14 @@ ShopifyAPI uses ActiveResource to communicate with the REST web service. ActiveR
 
 2. For a private App you just need to set the base site url as follows:
 
-	shop_url = "https://#{API_KEY}:#{PASSWORD}@SHOP_NAME.myshopify.com/admin"
-	ShopifyAPI::Base.site = shop_url
+		shop_url = "https://#{API_KEY}:#{PASSWORD}@SHOP_NAME.myshopify.com/admin"
+		ShopifyAPI::Base.site = shop_url
 
-That's it, you're done, skip to step 7 and start using the API!
+	That's it, you're done, skip to step 7 and start using the API!
 
-For a partner app you will need to supply two parameters to the Session class before you instantiate it:
+	For a partner app you will need to supply two parameters to the Session class before you instantiate it:
 
-    ShopifyAPI::Session.setup({:api_key => API_KEY, :secret => SHARED_SECRET})
+	ShopifyAPI::Session.setup({:api_key => API_KEY, :secret => SHARED_SECRET})
 
 3. In order to access a shop's data, apps need an access token from that specific shop. This is a two-stage process. Before interacting with a shop for the first time an app should redirect the user to the following URL:
 
